@@ -69,6 +69,14 @@
     
     if (croppedImage != nil)
     {
+        
+        TiBlob *blob = [[TiBlob alloc] initWithImage:croppedImage];
+        NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys:blob,@"image",
+                               nil];
+        [self fireEvent:@"done" withObject:event];
+        
+        
+        /*
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                              NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -90,7 +98,7 @@
             NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys:filename,@"filename",
                                                                      nil];
             [self fireEvent:@"done" withObject:event];
-        }
+        } */
         
         
         

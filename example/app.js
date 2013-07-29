@@ -15,9 +15,18 @@ var btn = Ti.UI.createButton({
 	title: "Open Image Editor"
 });
 
-win.add(btn);
+//win.add(btn);
+win.rightNavButton = btn;
+win.open({modal:true});
 
-win.open();
+var iv = Ti.UI.createImageView({
+	width: 200,
+	image: 'pippo.jpg'
+});
+
+win.add(iv);
+
+
 
 // TODO: write your module tests here
 var TiCropImageEditor = require('it.etnatraining.TiCIE');
@@ -27,7 +36,7 @@ var imageEditor = TiCropImageEditor.createImageEditor();
 Ti.API.info(imageEditor);
 
 imageEditor.addEventListener("done", function(e) {
-	alert(e.filename);
+	iv.image = e.image;
 });
 
 
