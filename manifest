@@ -1,0 +1,18 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 0.1
+apiversion: 2
+description: My module
+author: tcaland
+license: Specify your license
+copyright: Copyright (c) 2013 by Your Company
+
+
+# these should not be edited
+name: TiCropImageEditor
+moduleid: it.etnatraining.TiCIE
+guid: 46602e7c-0f54-4eb4-9210-9eece1dff1ce
+platform: iphone
+minsdk: 3.1.1.GA
