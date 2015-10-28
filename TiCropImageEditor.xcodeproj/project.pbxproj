@@ -197,6 +197,8 @@
 /* Begin PBXProject section */
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "TiCropImageEditor" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -307,6 +309,7 @@
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "arm64 i386 x86_64 armv7";
 			};
 			name = Debug;
 		};
@@ -340,6 +343,7 @@
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "arm64 i386 x86_64 armv7";
 			};
 			name = Release;
 		};
@@ -379,6 +383,7 @@
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "arm64 i386 x86_64 armv7";
 			};
 			name = Debug;
 		};
@@ -412,6 +417,7 @@
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "arm64 i386 x86_64 armv7";
 			};
 			name = Release;
 		};

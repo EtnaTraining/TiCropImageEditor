@@ -2,7 +2,7 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 0.1
+version: 0.2
 apiversion: 2
 description: My module
 author: tcaland
@@ -15,4 +15,5 @@ name: TiCropImageEditor
 moduleid: it.etnatraining.TiCIE
 guid: 46602e7c-0f54-4eb4-9210-9eece1dff1ce
 platform: iphone
-minsdk: 3.1.1.GA
+minsdk: 3.5.1.GA
+architectures: armv7 i386 x86_64 arm64
