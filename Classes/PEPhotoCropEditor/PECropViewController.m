@@ -23,7 +23,10 @@
     static NSBundle *bundle = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        bundle = [NSBundle bundleWithPath:@"PEPhotoCropEditor.bundle"];
+        
+        NSString *path = [NSString stringWithFormat:@"%@/modules/it.etnatraining.ticie/PEPhotoCropEditor.bundle", [[NSBundle mainBundle] resourcePath]];
+        
+        bundle = [[NSBundle alloc] initWithURL:[NSURL fileURLWithPath:path]];
     });
     
     return bundle;
