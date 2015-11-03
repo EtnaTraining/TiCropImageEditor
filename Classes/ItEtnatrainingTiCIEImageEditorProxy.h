@@ -7,9 +7,7 @@
 #import "PECropViewController.h"
 #import "TiProxy.h"
 
-@interface ItEtnatrainingTiCIEImageEditorProxy : TiProxy<PECropViewControllerDelegate> {
-
-}
+@interface ItEtnatrainingTiCIEImageEditorProxy : TiProxy<PECropViewControllerDelegate>
 
 - (void)open:(id)args;
 

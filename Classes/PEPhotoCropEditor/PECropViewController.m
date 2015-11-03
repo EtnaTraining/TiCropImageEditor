@@ -23,8 +23,7 @@
     static NSBundle *bundle = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSURL *bundleURL = [[NSBundle mainBundle] URLForResource:@"PEPhotoCropEditor" withExtension:@"bundle"];
-        bundle = [[NSBundle alloc] initWithURL:bundleURL];
+        bundle = [NSBundle bundleWithPath:@"PEPhotoCropEditor.bundle"];
     });
     
     return bundle;
@@ -184,7 +183,7 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
                         PELocalizedString(@"5 x 7", nil),
                         PELocalizedString(@"8 x 10", nil),
                         PELocalizedString(@"16 x 9", nil), nil];
-    [self.actionSheet showFromToolbar:self.navigationController.toolbar];
+    [self.actionSheet showInView:self.navigationController.view];
 }
 
 #pragma mark -
