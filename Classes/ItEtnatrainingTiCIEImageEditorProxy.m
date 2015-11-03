@@ -7,20 +7,13 @@
 
 #import "ItEtnatrainingTiCIEImageEditorProxy.h"
 #import "TiApp.h"
-#import "PECropViewController.h"
 
 @implementation ItEtnatrainingTiCIEImageEditorProxy
-
-
 
 -(void)_destroy
 {
 	[super _destroy];
 }
-
-
-
-
 
 - (void)open:(id)args
 {
@@ -54,9 +47,7 @@
     controller.image = image;
     //NSLog(@"ho caricato pure una immagine: %@", path);
     
-    
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-    
     
     [[TiApp app] showModalController:navigationController animated:YES];
 }
@@ -66,10 +57,8 @@
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
     
-    
     if (croppedImage != nil)
     {
-        
         TiBlob *blob = [[TiBlob alloc] initWithImage:croppedImage];
         NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys:blob,@"image",
                                nil];
@@ -99,11 +88,7 @@
                                                                      nil];
             [self fireEvent:@"done" withObject:event];
         } */
-        
-        
-        
     }
-    
     
     //self.imageView.image = croppedImage;
 }
@@ -112,6 +97,5 @@
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
 }
-
 
 @end

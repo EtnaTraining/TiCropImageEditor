@@ -8,15 +8,23 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol PECropViewControllerDelegate;
+
 @interface PECropViewController : UIViewController
 
-@property (nonatomic, weak) id delegate;
+@property (nonatomic, weak) id<PECropViewControllerDelegate> delegate;
 @property (nonatomic) UIImage *image;
 
 @property (nonatomic) BOOL keepingCropAspectRatio;
 @property (nonatomic) CGFloat cropAspectRatio;
 
 @property (nonatomic) CGRect cropRect;
+@property (nonatomic) CGRect imageCropRect;
+
+@property (nonatomic) BOOL toolbarHidden;
+
+- (void)resetCropRect;
+- (void)resetCropRectAnimated:(BOOL)animated;
 
 @end
 
