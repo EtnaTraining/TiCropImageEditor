@@ -8,7 +8,6 @@
 
 #import "PECropViewController.h"
 #import "PECropView.h"
-#import "TiUtils.h"
 
 @interface PECropViewController () <UIActionSheetDelegate>
 
@@ -24,20 +23,10 @@
     static NSBundle *bundle = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        //NSURL *bundleURL = [[NSBundle mainBundle] URLForResource:@"PEPhotoCropEditor" withExtension:@"bundle"];
         
-        NSString *path = [NSString stringWithFormat:@"%@/modules/it.etnatraining.ticie/PEPhotoCropEditor.bundle",
-                          [[NSBundle mainBundle] resourcePath]
-        ];
-      
-        //NSLog(@"bundle path: %@", path);
+        NSString *path = [NSString stringWithFormat:@"%@/modules/it.etnatraining.ticie/PEPhotoCropEditor.bundle", [[NSBundle mainBundle] resourcePath]];
         
-        NSURL *bundleURL = [NSURL fileURLWithPath:path];
-        
-        //NSLog(@"URL: %@ : %@", [bundleURL path], [bundleURL absoluteString]);
-       
-        
-        bundle = [[NSBundle alloc] initWithURL:bundleURL];
+        bundle = [[NSBundle alloc] initWithURL:[NSURL fileURLWithPath:path]];
     });
     
     return bundle;
@@ -47,6 +36,8 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
 {
     return [[PECropViewController bundle] localizedStringForKey:key value:nil table:@"Localizable"];
 }
+
+#pragma mark -
 
 - (void)loadView
 {
@@ -63,22 +54,27 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
 {
     [super viewDidLoad];
     
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.toolbar.translucent = NO;
+
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                           target:self
                                                                                           action:@selector(cancel:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                            target:self
                                                                                            action:@selector(done:)];
-    
-    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                                                   target:nil
-                                                                                   action:nil];
-    UIBarButtonItem *constrainButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"Constrain", nil)
-                                                                        style:UIBarButtonItemStyleBordered
-                                                                       target:self
-                                                                       action:@selector(constrain:)];
-    self.toolbarItems = @[flexibleSpace, constrainButton, flexibleSpace];
-    self.navigationController.toolbarHidden = NO;
+
+    if (!self.toolbarItems) {
+        UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                                       target:nil
+                                                                                       action:nil];
+        UIBarButtonItem *constrainButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"Constrain", nil)
+                                                                            style:UIBarButtonItemStyleBordered
+                                                                           target:self
+                                                                           action:@selector(constrain:)];
+        self.toolbarItems = @[flexibleSpace, constrainButton, flexibleSpace];
+    }
+    self.navigationController.toolbarHidden = self.toolbarHidden;
     
     self.cropView.image = self.image;
 }
@@ -93,6 +89,9 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
     if (!CGRectEqualToRect(self.cropRect, CGRectZero)) {
         self.cropRect = self.cropRect;
     }
+    if (!CGRectEqualToRect(self.imageCropRect, CGRectZero)) {
+        self.imageCropRect = self.imageCropRect;
+    }
     
     self.keepingCropAspectRatio = self.keepingCropAspectRatio;
 }
@@ -102,25 +101,12 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
     return YES;
 }
 
+#pragma mark -
+
 - (void)setImage:(UIImage *)image
 {
     _image = image;
     self.cropView.image = image;
-}
-
-- (void)cancel:(id)sender
-{
-    if ([self.delegate respondsToSelector:@selector(cropViewControllerDidCancel:)]) {
-        [self.delegate cropViewControllerDidCancel:self];
-    }
-}
-
-- (void)done:(id)sender
-{
-    
-    if ([self.delegate respondsToSelector:@selector(cropViewController:didFinishCroppingImage:)]) {
-        [self.delegate cropViewController:self didFinishCroppingImage:self.cropView.croppedImage];
-    }
 }
 
 - (void)setKeepingCropAspectRatio:(BOOL)keepingCropAspectRatio
@@ -138,6 +124,7 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
 - (void)setCropRect:(CGRect)cropRect
 {
     _cropRect = cropRect;
+    _imageCropRect = CGRectZero;
     
     CGRect cropViewCropRect = self.cropView.cropRect;
     cropViewCropRect.origin.x += cropRect.origin.x;
@@ -147,6 +134,40 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
                              fminf(CGRectGetMaxY(cropViewCropRect) - CGRectGetMinY(cropViewCropRect), CGRectGetHeight(cropRect)));
     cropViewCropRect.size = size;
     self.cropView.cropRect = cropViewCropRect;
+}
+
+- (void)setImageCropRect:(CGRect)imageCropRect
+{
+    _imageCropRect = imageCropRect;
+    _cropRect = CGRectZero;
+    
+    self.cropView.imageCropRect = imageCropRect;
+}
+
+- (void)resetCropRect
+{
+    [self.cropView resetCropRect];
+}
+
+- (void)resetCropRectAnimated:(BOOL)animated
+{
+    [self.cropView resetCropRectAnimated:animated];
+}
+
+#pragma mark -
+
+- (void)cancel:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(cropViewControllerDidCancel:)]) {
+        [self.delegate cropViewControllerDidCancel:self];
+    }
+}
+
+- (void)done:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(cropViewController:didFinishCroppingImage:)]) {
+        [self.delegate cropViewController:self didFinishCroppingImage:self.cropView.croppedImage];
+    }
 }
 
 - (void)constrain:(id)sender
@@ -165,8 +186,10 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
                         PELocalizedString(@"5 x 7", nil),
                         PELocalizedString(@"8 x 10", nil),
                         PELocalizedString(@"16 x 9", nil), nil];
-    [self.actionSheet showFromToolbar:self.navigationController.toolbar];
+    [self.actionSheet showInView:self.navigationController.view];
 }
+
+#pragma mark -
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -193,7 +216,7 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
     } else if (buttonIndex == 4) {
         CGFloat ratio = 3.0f / 4.0f;
         CGRect cropRect = self.cropView.cropRect;
-        CGFloat width = CGRectGetHeight(cropRect);
+        CGFloat width = CGRectGetWidth(cropRect);
         cropRect.size = CGSizeMake(width, width * ratio);
         self.cropView.cropRect = cropRect;
     } else if (buttonIndex == 5) {
@@ -205,7 +228,7 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
     } else if (buttonIndex == 8) {
         CGFloat ratio = 9.0f / 16.0f;
         CGRect cropRect = self.cropView.cropRect;
-        CGFloat width = CGRectGetHeight(cropRect);
+        CGFloat width = CGRectGetWidth(cropRect);
         cropRect.size = CGSizeMake(width, width * ratio);
         self.cropView.cropRect = cropRect;
     }
