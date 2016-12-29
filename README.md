@@ -13,7 +13,7 @@ Using the module is quite simple:
 
 Import the module in your code with:
 ```js
-var TiCropImageEditor = require('it.etnatraining.TiCIE
+var TiCropImageEditor = require('it.etnatraining.TiCIE');
 ```
 
 then create an image editor instance with:
